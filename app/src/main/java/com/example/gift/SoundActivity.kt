@@ -144,7 +144,7 @@ fun ShowSong(selectedSong: Song?)
 
                     IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
                         Icon(
-                            painter = painterResource(id = android.R.drawable.ic_media_nextsc), // Icona play di Android
+                            painter = painterResource(id = android.R.drawable.ic_media_next), // Icona play di Android
                             contentDescription = "Play",
                             tint = Color.Red // Colore dell'icona
                         )
