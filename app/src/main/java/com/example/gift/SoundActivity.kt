@@ -1,17 +1,25 @@
 package com.example.gift
 
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,33 +27,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.gift.homeutility.GlobalVariable
 import com.example.gift.homeutility.Song
 import com.example.gift.homeutility.getRaw
 import com.example.gift.ui.theme.GiftTheme
-import kotlinx.coroutines.flow.StateFlow
+import com.example.gift.homeutility.*
 
-class Sound(private val selectedSong: Song) : ComponentActivity() {
+class Sound() : ComponentActivity() {
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             GiftTheme {
-
+                val selectedSong = intent.getParcelableExtra("song",Song::class.java)
                 ShowSong(selectedSong)
             }
         }
     }
+
+
 }
 
 @Composable
-fun ShowSong(selectedSong: Song)
+fun ShowSong(selectedSong: Song?)
 {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+    Scaffold(modifier = Modifier.fillMaxSize(), containerColor = getColor(GlobalVariable.color.BACKGROUND_COLOR) ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -55,26 +73,90 @@ fun ShowSong(selectedSong: Song)
         )
         {
             Column(
-                verticalArrangement = Arrangement.spacedBy(15.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(50.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            ){
-                Image(
-                    painter = painterResource(id = selectedSong.image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(300.dp)
-                        .clip(RoundedCornerShape(20.dp)),
-                    contentScale = ContentScale.Crop
-                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
 
-                Text(text = selectedSong.title,
+                    ){
+                    if(selectedSong != null)
+                    {
+                        Image(
+                            painter = painterResource(id = selectedSong.image),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(350.dp)
+                                .clip(RoundedCornerShape(20.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+
+                        Text(text = selectedSong.title,
+                            modifier = Modifier
+                                .align(Alignment.Start),
+                            style = MaterialTheme.typography.displayMedium,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontStyle = FontStyle.Italic
+
+                        )
+
+
+                    }
+
+
+                }
+
+                //Riga per gestire la musica
+                Row(
                     modifier = Modifier
-                        .align(Alignment.Start),
-                    style = MaterialTheme.typography.headlineMedium
+                        .padding(vertical = 20.dp, horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 )
+                {
+                    IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                        Icon(
+                            painter = painterResource(id = android.R.drawable.ic_media_previous),
+                            modifier = Modifier
+                                .size(100.dp),// Icona play di Android
+                            contentDescription = "Play",
+                            tint = Color.Red
+
+                        )
+
+
+                    }
+
+                    IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                        Icon(
+                            painter = painterResource(id = android.R.drawable.ic_media_pause), // Icona play di Android
+                            contentDescription = "Play",
+                            tint = Color.Red // Colore dell'icona
+                        )
+
+
+                    }
+
+                    IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                        Icon(
+                            painter = painterResource(id = android.R.drawable.ic_media_nextsc), // Icona play di Android
+                            contentDescription = "Play",
+                            tint = Color.Red // Colore dell'icona
+                        )
+
+
+                    }
+
+
+                }
 
             }
+
 
 
 

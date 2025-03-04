@@ -92,10 +92,9 @@ fun StartApp()
     var isVisible  by remember { mutableStateOf(true) }
     isVisible = false
     val songs = getItem()
-    val colorHome = Color(30,31,34)
     var selectedSong by remember { mutableStateOf(songs[0]) }
 
-    Scaffold(modifier = Modifier.fillMaxSize(),containerColor = colorHome) { innerPadding ->
+    Scaffold(modifier = Modifier.fillMaxSize(),containerColor = getColor(GlobalVariable.color.BACKGROUND_COLOR)) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -155,7 +154,10 @@ fun StartApp()
                 {
                     SongItem(selectedSong, click = {
                         //Apri la sheet view
-                        var intent = Intent(context, Sound(selectedSong)::class.java)
+                        //var intent = Intent(context, Sound(selectedSong)::class.java)
+                        //L'utilizzio di una variabile del costruttore non va a buon fine :(
+                        var intent = Intent(context, Sound::class.java)
+                        intent.putExtra("song", selectedSong)
                         context.startActivity(intent)
 
                     })

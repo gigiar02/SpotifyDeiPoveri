@@ -1,14 +1,24 @@
 package com.example.gift.homeutility
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import com.example.gift.R
 
 //Variabili globali utilizzate nel progetto
 enum class GlobalVariable
 {
     HOME_IMAGE;
+
+    //Colori
+    enum class color
+    {
+        BACKGROUND_COLOR,
+    }
+
     enum class music
     {
         MUSIC_1,
@@ -43,18 +53,48 @@ fun getRaw(globalVariable: GlobalVariable.music) : Int
     }
 }
 
-//Canzone
-class Song
-{
-    val title : String
-    val image : Int
-    val music : Int
 
-    constructor(title : String, image : Int, music : Int)
+fun getColor(globalVariable: GlobalVariable.color) : Color
+{
+    when(globalVariable)
     {
-        this.title = title
-        this.image = image
-        this.music = music
+        GlobalVariable.color.BACKGROUND_COLOR -> return Color(30,31,34)
+        else -> return Color(30,31,34)
+    }
+}
+
+//Canzone
+data class Song(
+    val title: String,
+    val image: Int,
+    val music: Int
+) : Parcelable {
+
+    // Costruttore che legge dal Parcel
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "", // Legge una stringa
+        parcel.readInt(),          // Legge un intero (image)
+        parcel.readInt()           // Legge un intero (music)
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(title) // Scrive la stringa nel Parcel
+        parcel.writeInt(image)    // Scrive l'intero (image)
+        parcel.writeInt(music)    // Scrive l'intero (music)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Song> {
+        override fun createFromParcel(parcel: Parcel): Song {
+            return Song(parcel) // Usa il costruttore personalizzato
+        }
+
+        override fun newArray(size: Int): Array<Song?> {
+            return arrayOfNulls(size)
+        }
     }
 }
 
