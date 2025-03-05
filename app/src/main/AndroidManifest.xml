@@ -32,6 +32,7 @@
             android:name=".SoundActivity"
             android:exported="true"
             android:label="Sound" />
+
     </application>
 
 </manifest>

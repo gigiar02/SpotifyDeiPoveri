@@ -2,8 +2,6 @@ package com.example.gift
 
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,9 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,14 +30,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.gift.homeutility.GlobalVariable
 import com.example.gift.homeutility.Song
-import com.example.gift.homeutility.getRaw
 import com.example.gift.ui.theme.GiftTheme
 import com.example.gift.homeutility.*
+
 
 class Sound() : ComponentActivity() {
 
@@ -51,7 +48,16 @@ class Sound() : ComponentActivity() {
         setContent {
             GiftTheme {
                 val selectedSong = intent.getParcelableExtra("song",Song::class.java)
-                ShowSong(selectedSong)
+                val stateName = intent.getStringExtra("state")
+                //var stato by remember { mutableStateOf(GlobalVariable.icon.ICON_PLAY) }
+                var stato = stateName?.let { GlobalVariable.icon.valueOf(it)}
+                if(stato == null)
+                {
+                    Text("")
+                }
+                    ShowSong(selectedSong, stato)
+
+
             }
         }
     }
@@ -60,7 +66,7 @@ class Sound() : ComponentActivity() {
 }
 
 @Composable
-fun ShowSong(selectedSong: Song?)
+fun ShowSong(selectedSong: Song?, state: GlobalVariable.icon?)
 {
 
     Scaffold(modifier = Modifier.fillMaxSize(), containerColor = getColor(GlobalVariable.color.BACKGROUND_COLOR) ) { innerPadding ->
@@ -84,7 +90,7 @@ fun ShowSong(selectedSong: Song?)
                     horizontalAlignment = Alignment.CenterHorizontally,
 
                     ){
-                    if(selectedSong != null)
+                    if(selectedSong != null && state != null)
                     {
                         Image(
                             painter = painterResource(id = selectedSong.image),
@@ -131,22 +137,28 @@ fun ShowSong(selectedSong: Song?)
 
 
                     }
+                    if(selectedSong != null && state != null)
+                    {
+                        IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                            Icon(
+                                painter = painterResource(id = getIcon(state)), // Icona play di Android
+                                contentDescription = "Play",
+                                tint = Color.Red // Colore dell'icona
+                            )
 
-                    IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
-                        Icon(
-                            painter = painterResource(id = android.R.drawable.ic_media_pause), // Icona play di Android
-                            contentDescription = "Play",
-                            tint = Color.Red // Colore dell'icona
-                        )
 
-
+                        }
                     }
+
 
                     IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
                         Icon(
                             painter = painterResource(id = android.R.drawable.ic_media_next), // Icona play di Android
                             contentDescription = "Play",
-                            tint = Color.Red // Colore dell'icona
+                            tint = Color.Red,
+                            modifier = Modifier
+                                .width(300.dp)
+
                         )
 
 
@@ -170,6 +182,6 @@ fun ShowSong(selectedSong: Song?)
 @Composable
 fun GreetingPreview2() {
     GiftTheme {
-        ShowSong(Song("Ciao",getRaw(GlobalVariable.HOME_IMAGE), getRaw(GlobalVariable.HOME_IMAGE) ))
+        //ShowSong(Song("Ciao",getRaw(GlobalVariable.HOME_IMAGE), getRaw(GlobalVariable.HOME_IMAGE) ))
     }
 }

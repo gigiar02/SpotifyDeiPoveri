@@ -93,6 +93,8 @@ fun StartApp()
     isVisible = false
     val songs = getItem()
     var selectedSong by remember { mutableStateOf(songs[0]) }
+    var state by remember { mutableStateOf(GlobalVariable.icon.ICON_PLAY) }
+    var currentIndex  by remember { mutableStateOf(0) }
 
     Scaffold(modifier = Modifier.fillMaxSize(),containerColor = getColor(GlobalVariable.color.BACKGROUND_COLOR)) { innerPadding ->
         Column(
@@ -117,9 +119,22 @@ fun StartApp()
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
             ) {
-                IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                IconButton(onClick = {
+
+                        if(state == GlobalVariable.icon.ICON_STOP)
+                        {
+                            state = GlobalVariable.icon.ICON_PLAY
+                        }
+                        else
+                        {
+                            state = GlobalVariable.icon.ICON_STOP
+                        }
+                        //Riprendi la canzone o fai partire la prima canzone
+                        
+
+                }) {
                     Icon(
-                        painter = painterResource(id = android.R.drawable.ic_media_play), // Icona play di Android
+                        painter = painterResource(id = getIcon(state)), // Icona play di Android
                         contentDescription = "Play",
                         tint = Color.Red // Colore dell'icona
                     )
@@ -158,6 +173,7 @@ fun StartApp()
                         //L'utilizzio di una variabile del costruttore non va a buon fine :(
                         var intent = Intent(context, Sound::class.java)
                         intent.putExtra("song", selectedSong)
+                        intent.putExtra("state", state)
                         context.startActivity(intent)
 
                     })
