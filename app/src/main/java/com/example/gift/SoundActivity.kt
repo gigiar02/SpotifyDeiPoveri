@@ -48,9 +48,9 @@ class Sound() : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GiftTheme {
-                val selectedSong = intent.getParcelableExtra("song",Song::class.java)
 
-                ShowSong(selectedSong)
+
+                ShowSong(soundHandler.selectedSong)
 
 
             }

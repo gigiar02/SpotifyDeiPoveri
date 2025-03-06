@@ -7,6 +7,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -155,7 +156,7 @@ fun getItem() : List<Song>
 
 }
 
-var oldSong : Song? = null
+
 
 //Gestore musica
 class SoundHandler
@@ -222,6 +223,8 @@ fun play(oldMediaPlayer: MediaPlayer?,context: Context) : MediaPlayer
 var soundHandler  by mutableStateOf(SoundHandler())
 var lastPosition by mutableStateOf(0)
 var oldMediaPlayer by mutableStateOf<MediaPlayer?>(null)
+var index by mutableIntStateOf(0)
+var oldSong by mutableStateOf<Song?>(null)
 //Variabile globale per state
 
 public  var state by mutableStateOf(GlobalVariable.icon.ICON_PLAY)

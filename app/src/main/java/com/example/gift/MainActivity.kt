@@ -1,6 +1,7 @@
 package com.example.gift
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -87,11 +88,10 @@ fun yes()
 fun StartApp()
 {
     val context = LocalContext.current
-    var oldSong : Song? = null
     //Barra di navigazione
-    var isVisible  by remember { mutableStateOf(true) }
+    var isVisible  by remember { mutableStateOf(false) }
     var isRunning  by remember { mutableStateOf(false) }
-    isVisible = false
+
     val songs = soundHandler.songList
     val handler = soundHandler
     var selection  = soundHandler.selectedSong
@@ -121,7 +121,44 @@ fun StartApp()
                 horizontalArrangement = Arrangement.End,
             ) {
                 IconButton(onClick = {
-                        push(context)
+                        //Se lo stato era play e hai cliccato
+                        if(state == GlobalVariable.icon.ICON_PLAY)
+                        {
+                            state = GlobalVariable.icon.ICON_STOP
+
+                            //Devi riprendere la riproduzione da dove eri
+                            if(oldSong != null)
+                            {
+                                //Si posiziona all'ultimo punto in cui si era fermato
+                                soundHandler.mediaPlayer.seekTo(lastPosition)
+                                //Inizia la riproduzione
+                                soundHandler.mediaPlayer.start()
+                            }else
+                            {
+                                //Questa è la prima canzone ad essere riprodotta
+                                //Imposta l'index a 0 per poter partire dalla prima
+                                index = 0
+                                //Aggiorna la canzone piu recente
+                                oldSong = soundHandler.songList[index]
+                                //La canzone selezionata sarà la prima
+                                soundHandler.selectedSong = soundHandler.songList[index]
+                                //Inizia la riproduzione
+                                oldMediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
+                                soundHandler.mediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
+                                lastPosition = 0;
+                                soundHandler.mediaPlayer.start()
+                            }
+
+
+                        }else
+                        {
+                            //Quando il tasto è stato premuto si stava riproducento la musica che va messa in pausa
+                            lastPosition = soundHandler.mediaPlayer.currentPosition
+                            soundHandler.mediaPlayer.pause()
+                            state = GlobalVariable.icon.ICON_PLAY
+
+
+                        }
                         isVisible = true
 
                         
@@ -141,15 +178,26 @@ fun StartApp()
                 modifier = Modifier.wrapContentSize(),
                 verticalArrangement = Arrangement.spacedBy(0.dp) // Spazio tra gli elementi
             ) {
-                itemsIndexed(songs) { index, song ->
+                itemsIndexed(songs) { i, song ->
                     // Ogni item della lista
                     SongItem(song = song, click = {
+                        //Assegno l'index della canzone
+                        state = GlobalVariable.icon.ICON_STOP
+                        oldMediaPlayer?.stop()
+                        oldMediaPlayer?.release()
 
+                        //Aggiorno la canzone piu recente, l'index e il posizionamento
                         soundHandler.selectedSong = song
+                        soundHandler.mediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
+                        index = i
+                        lastPosition = 0;
 
-                        //soundHandler.play(soundHandler.mediaPlayer,context)
-                        push(context)
-                        isRunning = true
+                        //Aggiorna la canzone come la piu recente
+                        oldSong = song
+                        oldMediaPlayer = soundHandler.mediaPlayer
+
+                        //Inizia la riproduzione
+                        soundHandler.mediaPlayer.start()
                         isVisible = true
 
 
@@ -168,13 +216,11 @@ fun StartApp()
             ) {
                 if(isVisible)
                 {
-                    SongItem(soundHandler.selectedSong, click = {
+                    SongBoard(click = {
                         //Apri la sheet view
                         //var intent = Intent(context, Sound(selectedSong)::class.java)
                         //L'utilizzio di una variabile del costruttore non va a buon fine :(
                         var intent = Intent(context, Sound::class.java)
-                        intent.putExtra("song", soundHandler.selectedSong)
-                        intent.putExtra("state", state)
                         context.startActivity(intent)
 
                     })
@@ -197,8 +243,6 @@ fun StartApp()
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun SongItem(song: Song,click:   () -> Unit) {
-    var clicked by remember { mutableStateOf(true) }
-    clicked = false
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -220,6 +264,44 @@ fun SongItem(song: Song,click:   () -> Unit) {
 
         Text(
             song.title,
+            color = Color.White,
+            modifier = Modifier
+                .align(alignment = Alignment.CenterVertically),
+            style = MaterialTheme.typography.headlineMedium
+
+        )
+
+    }
+
+
+}
+
+
+
+@Composable
+fun SongBoard(click:   () -> Unit) {
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable (onClick = click),
+
+        horizontalArrangement = Arrangement.spacedBy(15.dp),
+
+        ) {
+
+        Image(
+            painter = painterResource(id = soundHandler.selectedSong.image),
+            contentDescription = null,
+            modifier = Modifier
+                .size(70.dp)
+                .clip(RoundedCornerShape(25.dp)),
+            contentScale = ContentScale.Fit
+
+        )
+
+        Text(
+            soundHandler.selectedSong.title,
             color = Color.White,
             modifier = Modifier
                 .align(alignment = Alignment.CenterVertically),
