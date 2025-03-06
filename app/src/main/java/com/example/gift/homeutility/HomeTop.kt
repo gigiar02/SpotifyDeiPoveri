@@ -1,5 +1,6 @@
 package com.example.gift.homeutility
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Parcel
 import android.os.Parcelable
@@ -154,6 +155,7 @@ fun getItem() : List<Song>
 
 }
 
+var oldSong : Song? = null
 
 //Gestore musica
 class SoundHandler
@@ -181,24 +183,25 @@ class SoundHandler
 
     }
 
-    @Composable
-    fun play(oldMediaPlayer: MediaPlayer?) : MediaPlayer
+
+fun play(oldMediaPlayer: MediaPlayer?,context: Context) : MediaPlayer
     {
-        val playSound by remember { mutableStateOf(false) }
-        //Prendo il contesto corrente
-        val context = LocalContext.current
+
         //Ottieni il file mp3 del suono randomico scelto
-        val ID = selectedSong.music
+        if(oldSong != selectedSong)
+        {
+            val ID = selectedSong.music
 
-        //Ferma  e rilascia l'ex mediaplayer se esiste
-        oldMediaPlayer?.stop()
-        oldMediaPlayer?.release()
+            //Ferma  e rilascia l'ex mediaplayer se esiste
+            oldMediaPlayer?.stop()
+            oldMediaPlayer?.release()
 
-        mediaPlayer = remember { MediaPlayer.create(context,ID)}
-
-        LaunchedEffect(Unit) {
-
-
+            //mediaPlayer = remember { MediaPlayer.create(context,ID)}
+            mediaPlayer = MediaPlayer.create(context,ID)
+            oldSong = selectedSong
+            mediaPlayer.start()
+        }else
+        {
             mediaPlayer.start()
         }
 
@@ -207,40 +210,64 @@ class SoundHandler
         return mediaPlayer
     }
 
+    fun stop()
+    {
+        mediaPlayer.stop()
+    }
+
 }
 
 //A questo punto posso creare il gestore della musica
 
 var soundHandler  by mutableStateOf(SoundHandler())
-
-
-fun getSoundHandler() : SoundHandler
-{
-    return soundHandler
-}
-
+var lastPosition by mutableStateOf(0)
 
 //Variabile globale per state
 
 public  var state by mutableStateOf(GlobalVariable.icon.ICON_PLAY)
 
 
-fun getState() : GlobalVariable.icon
+fun push(context: Context)
 {
-    return state
-}
-
-
-fun push()
-{
-    if(state == GlobalVariable.icon.ICON_STOP)
+    if(oldSong != null)
     {
-        state = GlobalVariable.icon.ICON_PLAY
+        if(state == GlobalVariable.icon.ICON_STOP)
+        {
+            if(oldSong == soundHandler.selectedSong)
+            {
+                state = GlobalVariable.icon.ICON_PLAY
+                lastPosition = soundHandler.mediaPlayer.currentPosition
+                soundHandler.mediaPlayer.pause()
+            }else
+            {
+                oldSong = soundHandler.selectedSong
+                lastPosition = 0;
+                //soundHandler.mediaPlayer
+            }
 
-    }
-    else
+        }
+        else
+        {
+            if(oldSong == soundHandler.selectedSong)
+            {
+                state = GlobalVariable.icon.ICON_STOP
+                soundHandler.mediaPlayer.seekTo(lastPosition)
+                soundHandler.mediaPlayer.start()
+            }else
+            {
+                oldSong = soundHandler.selectedSong
+                lastPosition = 0;
+                push(context)
+            }
+
+
+
+        }
+    }else
     {
-        state = GlobalVariable.icon.ICON_STOP
+        oldSong = soundHandler.selectedSong
+        lastPosition = 0;
+        push(context)
     }
 
     //Riprendi la canzone o fai partire la prima canzone

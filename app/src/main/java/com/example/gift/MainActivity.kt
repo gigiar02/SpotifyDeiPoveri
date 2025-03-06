@@ -87,14 +87,14 @@ fun yes()
 fun StartApp()
 {
     val context = LocalContext.current
+    var oldSong : Song? = null
     //Barra di navigazione
     var isVisible  by remember { mutableStateOf(true) }
     var isRunning  by remember { mutableStateOf(false) }
     isVisible = false
-    val songs = getSoundHandler().songList
-    val handler = getSoundHandler()
-    var selection  = getSoundHandler().selectedSong
-    var state by remember { mutableStateOf(GlobalVariable.icon.ICON_PLAY) }
+    val songs = soundHandler.songList
+    val handler = soundHandler
+    var selection  = soundHandler.selectedSong
     var currentIndex  by remember { mutableStateOf(0) }
 
     Scaffold(modifier = Modifier.fillMaxSize(),containerColor = getColor(GlobalVariable.color.BACKGROUND_COLOR)) { innerPadding ->
@@ -121,14 +121,14 @@ fun StartApp()
                 horizontalArrangement = Arrangement.End,
             ) {
                 IconButton(onClick = {
-
-                        push()
+                        push(context)
+                        isVisible = true
 
                         
 
                 }) {
                     Icon(
-                        painter = painterResource(id = getIcon(getState())), // Icona play di Android
+                        painter = painterResource(id = getIcon(state)), // Icona play di Android
                         contentDescription = "Play",
                         tint = Color.Red // Colore dell'icona
                     )
@@ -144,8 +144,11 @@ fun StartApp()
                 itemsIndexed(songs) { index, song ->
                     // Ogni item della lista
                     SongItem(song = song, click = {
-                        selection = song
-                        getSoundHandler().SetSelectedSong(song)
+
+                        soundHandler.selectedSong = song
+
+                        //soundHandler.play(soundHandler.mediaPlayer,context)
+                        push(context)
                         isRunning = true
                         isVisible = true
 
@@ -165,12 +168,12 @@ fun StartApp()
             ) {
                 if(isVisible)
                 {
-                    SongItem(selection, click = {
+                    SongItem(soundHandler.selectedSong, click = {
                         //Apri la sheet view
                         //var intent = Intent(context, Sound(selectedSong)::class.java)
                         //L'utilizzio di una variabile del costruttore non va a buon fine :(
                         var intent = Intent(context, Sound::class.java)
-                        intent.putExtra("song", selection)
+                        intent.putExtra("song", soundHandler.selectedSong)
                         intent.putExtra("state", state)
                         context.startActivity(intent)
 

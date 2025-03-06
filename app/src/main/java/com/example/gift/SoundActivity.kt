@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +63,7 @@ class Sound() : ComponentActivity() {
 @Composable
 fun ShowSong(selectedSong: Song?)
 {
+    val context = LocalContext.current
     Scaffold(modifier = Modifier.fillMaxSize(), containerColor = getColor(GlobalVariable.color.BACKGROUND_COLOR) ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -86,7 +88,7 @@ fun ShowSong(selectedSong: Song?)
                     if(selectedSong != null)
                     {
                         Image(
-                            painter = painterResource(id = selectedSong.image),
+                            painter = painterResource(id = soundHandler.selectedSong.image),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(350.dp)
@@ -94,7 +96,7 @@ fun ShowSong(selectedSong: Song?)
                             contentScale = ContentScale.Crop
                         )
 
-                        Text(text = selectedSong.title,
+                        Text(text = soundHandler.selectedSong.title,
                             modifier = Modifier
                                 .align(Alignment.Start),
                             style = MaterialTheme.typography.displayMedium,
@@ -130,20 +132,19 @@ fun ShowSong(selectedSong: Song?)
 
 
                     }
-                    if(selectedSong != null)
-                    {
+
                         IconButton(onClick = {
-                            push()
+                            push(context = context)
                         }) {
                             Icon(
-                                painter = painterResource(id = getIcon(getState())), // Icona play di Android
+                                painter = painterResource(id = getIcon(state)), // Icona play di Android
                                 contentDescription = "Play",
                                 tint = Color.Red // Colore dell'icona
                             )
 
 
                         }
-                    }
+
 
 
                     IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
