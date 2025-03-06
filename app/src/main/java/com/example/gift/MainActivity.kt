@@ -86,13 +86,14 @@ fun yes()
 @Composable
 fun StartApp()
 {
-
     val context = LocalContext.current
     //Barra di navigazione
     var isVisible  by remember { mutableStateOf(true) }
+    var isRunning  by remember { mutableStateOf(false) }
     isVisible = false
-    val songs = getItem()
-    var selectedSong by remember { mutableStateOf(songs[0]) }
+    val songs = getSoundHandler().songList
+    val handler = getSoundHandler()
+    var selection  = getSoundHandler().selectedSong
     var state by remember { mutableStateOf(GlobalVariable.icon.ICON_PLAY) }
     var currentIndex  by remember { mutableStateOf(0) }
 
@@ -121,20 +122,13 @@ fun StartApp()
             ) {
                 IconButton(onClick = {
 
-                        if(state == GlobalVariable.icon.ICON_STOP)
-                        {
-                            state = GlobalVariable.icon.ICON_PLAY
-                        }
-                        else
-                        {
-                            state = GlobalVariable.icon.ICON_STOP
-                        }
-                        //Riprendi la canzone o fai partire la prima canzone
+                        push()
+
                         
 
                 }) {
                     Icon(
-                        painter = painterResource(id = getIcon(state)), // Icona play di Android
+                        painter = painterResource(id = getIcon(getState())), // Icona play di Android
                         contentDescription = "Play",
                         tint = Color.Red // Colore dell'icona
                     )
@@ -150,10 +144,14 @@ fun StartApp()
                 itemsIndexed(songs) { index, song ->
                     // Ogni item della lista
                     SongItem(song = song, click = {
-                        selectedSong = song
+                        selection = song
+                        getSoundHandler().SetSelectedSong(song)
+                        isRunning = true
                         isVisible = true
 
+
                     })
+
                 }
                 }
 
@@ -167,12 +165,12 @@ fun StartApp()
             ) {
                 if(isVisible)
                 {
-                    SongItem(selectedSong, click = {
+                    SongItem(selection, click = {
                         //Apri la sheet view
                         //var intent = Intent(context, Sound(selectedSong)::class.java)
                         //L'utilizzio di una variabile del costruttore non va a buon fine :(
                         var intent = Intent(context, Sound::class.java)
-                        intent.putExtra("song", selectedSong)
+                        intent.putExtra("song", selection)
                         intent.putExtra("state", state)
                         context.startActivity(intent)
 
@@ -195,7 +193,7 @@ fun StartApp()
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun SongItem(song: Song,click:  () -> Unit) {
+fun SongItem(song: Song,click:   () -> Unit) {
     var clicked by remember { mutableStateOf(true) }
     clicked = false
     Row (

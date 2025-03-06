@@ -4,9 +4,14 @@ import android.media.MediaPlayer
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.example.gift.R
 
 //Variabili globali utilizzate nel progetto
@@ -26,12 +31,13 @@ enum class GlobalVariable
         ICON_STOP,
         ICON_NEXT,
         ICON_PREVIOUS;
+
     }
 
     enum class music
     {
-        MUSIC_1,
-        MUSIC_2,
+        SENZACUORE,
+        GLISBANDATIHANNOPERSO,
         MUSIC_3,
         MUSIC_4
     }
@@ -55,9 +61,9 @@ fun getRaw(globalVariable: GlobalVariable.music) : Int
 {
     when(globalVariable)
     {
-        GlobalVariable.music.MUSIC_1 -> return R.drawable.couple
-        GlobalVariable.music.MUSIC_2 -> return R.drawable.couple
-        else -> return R.drawable.couple
+        GlobalVariable.music.SENZACUORE -> return R.raw.senzacuore
+        GlobalVariable.music.GLISBANDATIHANNOPERSO -> return R.raw.glisbandatihannoperso
+        else -> return R.raw.senzacuore
 
     }
 }
@@ -121,38 +127,123 @@ data class Song(
     }
 }
 
-//Gestore musica
-class soundHandler
-{
-    //Array di canzoni
-    var songList : List<Song>
-    //Gestore musica
-    var mediaPlayer : MediaPlayer
 
-    constructor(song : List<Song>, media : MediaPlayer)
-    {
-        songList = song
-        mediaPlayer = media
-
-    }
-
-    fun addSong(song : Song)
-    {
-        
-
-    }
-}
 //Restituisce la lista ordinata di canzoni
-@Composable
+
 fun getItem() : List<Song>
 {
 
-    val songs = remember { mutableStateListOf(
-            Song("prova", getRaw(GlobalVariable.HOME_IMAGE), getRaw(GlobalVariable.music.MUSIC_1)),
-            Song("prova2", getRaw(GlobalVariable.HOME_IMAGE), getRaw(GlobalVariable.music.MUSIC_2)),
-            Song("prova3", getRaw(GlobalVariable.HOME_IMAGE), getRaw(GlobalVariable.music.MUSIC_3))
-            ) }
+    val songs = listOf(
+        Song(
+            "Senza Cuore",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.SENZACUORE)
+        ),
+        Song(
+            "Gli sbandati hanno perso",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.GLISBANDATIHANNOPERSO)
+        ),
+        Song(
+            "prova3",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.GLISBANDATIHANNOPERSO)
+        )
+    )
     return songs
+
+}
+
+
+//Gestore musica
+class SoundHandler
+{
+    //Array di canzoni
+    var songList = getItem()
+    //Gestore musica
+    var mediaPlayer by mutableStateOf<MediaPlayer>(MediaPlayer())
+    //Canzone selezionata
+    var selectedSong by mutableStateOf(songList[0])
+
+    constructor()
+    {
+
+        mediaPlayer = MediaPlayer()
+
+    }
+
+
+
+
+    fun SetSelectedSong(song : Song)
+    {
+        selectedSong = song
+
+    }
+
+    @Composable
+    fun play(oldMediaPlayer: MediaPlayer?) : MediaPlayer
+    {
+        val playSound by remember { mutableStateOf(false) }
+        //Prendo il contesto corrente
+        val context = LocalContext.current
+        //Ottieni il file mp3 del suono randomico scelto
+        val ID = selectedSong.music
+
+        //Ferma  e rilascia l'ex mediaplayer se esiste
+        oldMediaPlayer?.stop()
+        oldMediaPlayer?.release()
+
+        mediaPlayer = remember { MediaPlayer.create(context,ID)}
+
+        LaunchedEffect(Unit) {
+
+
+            mediaPlayer.start()
+        }
+
+
+
+        return mediaPlayer
+    }
+
+}
+
+//A questo punto posso creare il gestore della musica
+
+var soundHandler  by mutableStateOf(SoundHandler())
+
+
+fun getSoundHandler() : SoundHandler
+{
+    return soundHandler
+}
+
+
+//Variabile globale per state
+
+public  var state by mutableStateOf(GlobalVariable.icon.ICON_PLAY)
+
+
+fun getState() : GlobalVariable.icon
+{
+    return state
+}
+
+
+fun push()
+{
+    if(state == GlobalVariable.icon.ICON_STOP)
+    {
+        state = GlobalVariable.icon.ICON_PLAY
+
+    }
+    else
+    {
+        state = GlobalVariable.icon.ICON_STOP
+    }
+
+    //Riprendi la canzone o fai partire la prima canzone
 
 }
 
