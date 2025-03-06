@@ -221,7 +221,7 @@ fun play(oldMediaPlayer: MediaPlayer?,context: Context) : MediaPlayer
 
 var soundHandler  by mutableStateOf(SoundHandler())
 var lastPosition by mutableStateOf(0)
-
+var oldMediaPlayer by mutableStateOf<MediaPlayer?>(null)
 //Variabile globale per state
 
 public  var state by mutableStateOf(GlobalVariable.icon.ICON_PLAY)
@@ -241,8 +241,13 @@ fun push(context: Context)
             }else
             {
                 oldSong = soundHandler.selectedSong
+                //Smetti di riprodurre la canzone di prima
+                oldMediaPlayer?.stop()
+                oldMediaPlayer?.release()
+
+                soundHandler.mediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
                 lastPosition = 0;
-                //soundHandler.mediaPlayer
+                soundHandler.mediaPlayer.start()
             }
 
         }
@@ -255,9 +260,15 @@ fun push(context: Context)
                 soundHandler.mediaPlayer.start()
             }else
             {
+                state = GlobalVariable.icon.ICON_STOP
                 oldSong = soundHandler.selectedSong
+                oldMediaPlayer?.stop()
+                oldMediaPlayer?.release()
+
+                soundHandler.mediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
                 lastPosition = 0;
-                push(context)
+                soundHandler.mediaPlayer.start()
+
             }
 
 
@@ -266,8 +277,14 @@ fun push(context: Context)
     }else
     {
         oldSong = soundHandler.selectedSong
+
+        oldMediaPlayer?.stop()
+        oldMediaPlayer?.release()
+
+        soundHandler.mediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
         lastPosition = 0;
-        push(context)
+        soundHandler.mediaPlayer.start()
+
     }
 
     //Riprendi la canzone o fai partire la prima canzone
