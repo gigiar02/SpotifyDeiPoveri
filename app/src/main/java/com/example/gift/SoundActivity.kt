@@ -2,6 +2,8 @@ package com.example.gift
 
 import android.os.Build
 import android.os.Bundle
+import android.util.AttributeSet
+import android.widget.SeekBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +41,6 @@ import com.example.gift.homeutility.Song
 import com.example.gift.ui.theme.GiftTheme
 import com.example.gift.homeutility.*
 
-
 class Sound() : ComponentActivity() {
 
 
@@ -48,7 +50,6 @@ class Sound() : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GiftTheme {
-
 
                 ShowSong(soundHandler.selectedSong)
 
@@ -110,6 +111,17 @@ fun ShowSong(selectedSong: Song?)
                     }
 
 
+                    Slider(
+                        value = soundHandler.sliderPosition,
+                        onValueChange = { soundHandler.mediaPlayer.seekTo((it*100000).toInt())
+                                          soundHandler.sliderPosition = it
+                                        },
+                        modifier = Modifier
+                            .width(350.dp),
+                    )
+                    Text(text =  soundHandler.sliderPosition.toString())
+
+
                 }
 
                 //Riga per gestire la musica
@@ -120,7 +132,7 @@ fun ShowSong(selectedSong: Song?)
                     verticalAlignment = Alignment.CenterVertically
                 )
                 {
-                    IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                    IconButton(onClick = { prev() }) {
                         Icon(
                             painter = painterResource(id = android.R.drawable.ic_media_previous),
                             modifier = Modifier
@@ -147,7 +159,7 @@ fun ShowSong(selectedSong: Song?)
 
 
 
-                    IconButton(onClick = { /* Azione quando il bottone play viene premuto */ }) {
+                    IconButton(onClick = { next() }) {
                         Icon(
                             painter = painterResource(id = android.R.drawable.ic_media_next), // Icona play di Android
                             contentDescription = "Play",

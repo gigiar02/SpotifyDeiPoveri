@@ -88,6 +88,7 @@ fun yes()
 fun StartApp()
 {
     val context = LocalContext.current
+    soundHandler.context = context
     //Barra di navigazione
     var isVisible  by remember { mutableStateOf(false) }
     var isRunning  by remember { mutableStateOf(false) }
@@ -190,7 +191,7 @@ fun StartApp()
                         soundHandler.selectedSong = song
                         soundHandler.mediaPlayer = MediaPlayer.create(context, soundHandler.selectedSong.music)
                         index = i
-                        lastPosition = 0;
+                        lastPosition = 0
 
                         //Aggiorna la canzone come la piu recente
                         oldSong = song

@@ -167,6 +167,9 @@ class SoundHandler
     var mediaPlayer by mutableStateOf<MediaPlayer>(MediaPlayer())
     //Canzone selezionata
     var selectedSong by mutableStateOf(songList[0])
+    var index by mutableIntStateOf(0)
+    var context : Context? = null
+    var sliderPosition by mutableStateOf(0f)
 
     constructor()
     {
@@ -182,38 +185,6 @@ class SoundHandler
     {
         selectedSong = song
 
-    }
-
-
-fun play(oldMediaPlayer: MediaPlayer?,context: Context) : MediaPlayer
-    {
-
-        //Ottieni il file mp3 del suono randomico scelto
-        if(oldSong != selectedSong)
-        {
-            val ID = selectedSong.music
-
-            //Ferma  e rilascia l'ex mediaplayer se esiste
-            oldMediaPlayer?.stop()
-            oldMediaPlayer?.release()
-
-            //mediaPlayer = remember { MediaPlayer.create(context,ID)}
-            mediaPlayer = MediaPlayer.create(context,ID)
-            oldSong = selectedSong
-            mediaPlayer.start()
-        }else
-        {
-            mediaPlayer.start()
-        }
-
-
-
-        return mediaPlayer
-    }
-
-    fun stop()
-    {
-        mediaPlayer.stop()
     }
 
 }
@@ -291,6 +262,64 @@ fun push(context: Context)
     }
 
     //Riprendi la canzone o fai partire la prima canzone
+
+}
+
+
+//Inizia nuovamente l'ascolto del brano
+fun restartMusic()
+{
+    //Smetti di riprodurre la musica corrente
+
+    soundHandler.mediaPlayer.seekTo(0);
+    soundHandler.sliderPosition = 0f
+
+}
+
+//Vai alla canzone precedente
+
+fun prev()
+{
+    //Se la canzone precedente non esiste
+    state = GlobalVariable.icon.ICON_STOP
+    if(index == 0)
+    {
+        restartMusic()
+        return;
+    }
+
+    //Modifica la canzone corrente
+    index--;
+    soundHandler.selectedSong = soundHandler.songList[index]
+    oldMediaPlayer?.stop()
+    oldMediaPlayer?.release()
+    soundHandler.mediaPlayer = MediaPlayer.create(soundHandler.context, soundHandler.selectedSong.music)
+    oldMediaPlayer = soundHandler.mediaPlayer
+    soundHandler.mediaPlayer.start()
+
+}
+
+
+//Passa alla canzone successiva
+fun next()
+{
+    //Se la canzone precedente non esiste
+    if(index == soundHandler.songList.size-1)
+    {
+        restartMusic()
+        return;
+    }
+
+    //Modifica la canzone corrente
+    index++;
+    soundHandler.selectedSong = soundHandler.songList[index]
+    oldSong = soundHandler.selectedSong
+    oldMediaPlayer?.stop()
+    oldMediaPlayer?.release()
+    soundHandler.mediaPlayer = MediaPlayer.create(soundHandler.context, soundHandler.selectedSong.music)
+    oldMediaPlayer = soundHandler.mediaPlayer
+    state = GlobalVariable.icon.ICON_STOP
+    soundHandler.mediaPlayer.start()
 
 }
 
