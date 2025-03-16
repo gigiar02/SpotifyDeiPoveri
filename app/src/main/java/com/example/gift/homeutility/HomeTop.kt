@@ -307,6 +307,7 @@ fun next()
     if(index == soundHandler.songList.size-1)
     {
         restartMusic()
+        //Commento
         return;
     }
 
