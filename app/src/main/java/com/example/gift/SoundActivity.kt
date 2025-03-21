@@ -113,7 +113,8 @@ fun ShowSong(selectedSong: Song?)
 
                     Slider(
                         value = soundHandler.sliderPosition,
-                        onValueChange = { soundHandler.mediaPlayer.seekTo((it*100000).toInt())
+                        //100000
+                        onValueChange = { soundHandler.mediaPlayer.seekTo((it* soundHandler.mediaPlayer.duration).toInt())
                                           soundHandler.sliderPosition = it
                                         },
                         modifier = Modifier
@@ -159,7 +160,7 @@ fun ShowSong(selectedSong: Song?)
 
 
 
-                    IconButton(onClick = { next() }) {
+                    IconButton(onClick = {next() }) {
                         Icon(
                             painter = painterResource(id = android.R.drawable.ic_media_next), // Icona play di Android
                             contentDescription = "Play",
@@ -170,6 +171,14 @@ fun ShowSong(selectedSong: Song?)
                         )
 
 
+                    }
+
+                    soundHandler.mediaPlayer.setOnCompletionListener {
+                        if(index == soundHandler.songList.size-1)
+                        {
+                            index = -1
+                        }
+                        next()
                     }
 
 

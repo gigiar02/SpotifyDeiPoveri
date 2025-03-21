@@ -277,25 +277,27 @@ fun restartMusic()
 }
 
 //Vai alla canzone precedente
-
 fun prev()
 {
     //Se la canzone precedente non esiste
-    state = GlobalVariable.icon.ICON_STOP
     if(index == 0)
     {
         restartMusic()
+        //Commento
         return;
     }
 
     //Modifica la canzone corrente
     index--;
     soundHandler.selectedSong = soundHandler.songList[index]
+    oldSong = soundHandler.selectedSong
     oldMediaPlayer?.stop()
     oldMediaPlayer?.release()
     soundHandler.mediaPlayer = MediaPlayer.create(soundHandler.context, soundHandler.selectedSong.music)
     oldMediaPlayer = soundHandler.mediaPlayer
+    state = GlobalVariable.icon.ICON_STOP
     soundHandler.mediaPlayer.start()
+    soundHandler.sliderPosition = 0f
 
 }
 
@@ -320,6 +322,7 @@ fun next()
     soundHandler.mediaPlayer = MediaPlayer.create(soundHandler.context, soundHandler.selectedSong.music)
     oldMediaPlayer = soundHandler.mediaPlayer
     state = GlobalVariable.icon.ICON_STOP
+    soundHandler.sliderPosition = 0f
     soundHandler.mediaPlayer.start()
 
 }
