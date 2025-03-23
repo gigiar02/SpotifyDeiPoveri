@@ -1,12 +1,18 @@
 package com.example.gift.homeutility
 
 import android.content.Context
+import android.graphics.ImageDecoder
+import android.graphics.drawable.AnimatedImageDrawable
 import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.gift.R
+import java.net.URI
 
 //Variabili globali utilizzate nel progetto
 enum class GlobalVariable
@@ -40,8 +47,30 @@ enum class GlobalVariable
     {
         SENZACUORE,
         GLISBANDATIHANNOPERSO,
-        MUSIC_3,
-        MUSIC_4
+        OKANE,
+        DIVA,
+        MAMASBOY,
+        SOLDIER,
+        WRONG,
+        FALLINGDOWN,
+        LALA,
+        DARKRED,
+        AFFIRMATION,
+        APT,
+        WASHINGMACHINE,
+        MEANTHEDEVIL,
+        ALONEATTHEEDGE,
+        LAYALLYOURLOVEONME,
+        ALLQUIETONONTHEWESTERN,
+        DARKISTHENIGHT,
+        IDONTWANTTOSET,
+        TIFASTAREBENE,
+        ANXIETY
+    }
+
+    enum class gif
+    {
+        RUNNING
     }
 }
 
@@ -65,7 +94,37 @@ fun getRaw(globalVariable: GlobalVariable.music) : Int
     {
         GlobalVariable.music.SENZACUORE -> return R.raw.senzacuore
         GlobalVariable.music.GLISBANDATIHANNOPERSO -> return R.raw.glisbandatihannoperso
+        GlobalVariable.music.OKANE -> return R.raw.okane
+        GlobalVariable.music.DIVA -> return R.raw.diva
+        GlobalVariable.music.MAMASBOY -> return R.raw.mamasboy
+        GlobalVariable.music.SOLDIER -> return R.raw.soldier
+        GlobalVariable.music.WRONG -> return R.raw.wrong
+        GlobalVariable.music.FALLINGDOWN -> return R.raw.fallingdown
+        GlobalVariable.music.LALA -> return R.raw.lala
+        GlobalVariable.music.DARKRED -> return R.raw.darkred
+        GlobalVariable.music.AFFIRMATION -> return R.raw.affirmation
+        GlobalVariable.music.APT -> return R.raw.apt
+        GlobalVariable.music.WASHINGMACHINE -> return R.raw.washingmachine
+        GlobalVariable.music.MEANTHEDEVIL -> return R.raw.meandthedevil
+        GlobalVariable.music.ALONEATTHEEDGE -> return R.raw.aloneattheedge
+        GlobalVariable.music.LAYALLYOURLOVEONME -> return R.raw.layallyourloveonme
+        GlobalVariable.music.ALLQUIETONONTHEWESTERN -> return R.raw.allquietonthewestern
+        GlobalVariable.music.DARKISTHENIGHT -> return R.raw.darkisthenight
+        GlobalVariable.music.IDONTWANTTOSET -> return R.raw.idontwanttoset
+        GlobalVariable.music.TIFASTAREBENE -> return R.raw.tifastarebene
+        GlobalVariable.music.ANXIETY -> return R.raw.anxiety
         else -> return R.raw.senzacuore
+
+    }
+}
+
+
+fun getRaw(globalVariable: GlobalVariable.gif) : Int
+{
+    when(globalVariable)
+    {
+        GlobalVariable.gif.RUNNING -> return R.drawable.running
+        else -> return R.drawable.running
 
     }
 }
@@ -98,20 +157,26 @@ fun getColor(globalVariable: GlobalVariable.color) : Color
 data class Song(
     val title: String,
     val image: Int,
-    val music: Int
+    val music: Int,
+    val gif: Int,
+    val distance: Int
 ) : Parcelable {
 
     // Costruttore che legge dal Parcel
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "", // Legge una stringa
         parcel.readInt(),          // Legge un intero (image)
-        parcel.readInt()           // Legge un intero (music)
+        parcel.readInt(),           // Legge un intero (music)
+        parcel.readInt(),
+        parcel.readInt(),
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(title) // Scrive la stringa nel Parcel
         parcel.writeInt(image)    // Scrive l'intero (image)
         parcel.writeInt(music)    // Scrive l'intero (music)
+        parcel.writeInt(gif)
+        parcel.writeInt(distance)
     }
 
     override fun describeContents(): Int {
@@ -139,17 +204,155 @@ fun getItem() : List<Song>
         Song(
             "Senza Cuore",
             getRaw(GlobalVariable.HOME_IMAGE),
-            getRaw(GlobalVariable.music.SENZACUORE)
+            getRaw(GlobalVariable.music.SENZACUORE),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
         ),
         Song(
             "Gli sbandati hanno perso",
             getRaw(GlobalVariable.HOME_IMAGE),
-            getRaw(GlobalVariable.music.GLISBANDATIHANNOPERSO)
+            getRaw(GlobalVariable.music.GLISBANDATIHANNOPERSO),
+            getRaw(GlobalVariable.gif.RUNNING),
+            100
         ),
         Song(
-            "prova3",
+            "Mamushi",
             getRaw(GlobalVariable.HOME_IMAGE),
-            getRaw(GlobalVariable.music.GLISBANDATIHANNOPERSO)
+            getRaw(GlobalVariable.music.OKANE),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Diva",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.DIVA),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Mama's Boy",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.MAMASBOY),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Soldier",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.SOLDIER),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Wrong",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.MAMASBOY),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+                "Wrong",
+        getRaw(GlobalVariable.HOME_IMAGE),
+        getRaw(GlobalVariable.music.WRONG),
+        getRaw(GlobalVariable.gif.RUNNING),
+        50
+        ),Song(
+            "Falling Down",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.FALLINGDOWN),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "LA LA LA",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.LALA),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Dark Red",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.DARKRED),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Affirmation",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.AFFIRMATION),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Washing Machine",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.WASHINGMACHINE),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "APT",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.APT),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Me And The Devil",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.MEANTHEDEVIL),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Alone At The Edge",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.ALONEATTHEEDGE),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
+        ),
+        Song(
+            "Lay All Your Love On Me",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.LAYALLYOURLOVEONME),
+            getRaw(GlobalVariable.gif.RUNNING),
+            150
+        ),
+        Song(
+            "All Quiet On The Western",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.ALLQUIETONONTHEWESTERN),
+            getRaw(GlobalVariable.gif.RUNNING),
+            200
+        ),
+        Song(
+            "Dark Is The Night",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.DARKISTHENIGHT),
+            getRaw(GlobalVariable.gif.RUNNING),
+            100
+        ),
+        Song(
+            "I don't Want To Set The World",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.IDONTWANTTOSET),
+            getRaw(GlobalVariable.gif.RUNNING),
+            250
+        ),
+        Song(
+            "Ti Fa Stare Bene",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.TIFASTAREBENE),
+            getRaw(GlobalVariable.gif.RUNNING),
+            70
+        ),
+        Song(
+            "ANXIETY",
+            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.music.ANXIETY),
+            getRaw(GlobalVariable.gif.RUNNING),
+            50
         )
     )
     return songs
@@ -168,6 +371,8 @@ class SoundHandler
     //Canzone selezionata
     var selectedSong by mutableStateOf(songList[0])
     var index by mutableIntStateOf(0)
+    var position by mutableFloatStateOf(0f)
+    var gifPosition by mutableFloatStateOf(0f)
     var context : Context? = null
     var sliderPosition by mutableStateOf(0f)
 
@@ -296,8 +501,10 @@ fun prev()
     soundHandler.mediaPlayer = MediaPlayer.create(soundHandler.context, soundHandler.selectedSong.music)
     oldMediaPlayer = soundHandler.mediaPlayer
     state = GlobalVariable.icon.ICON_STOP
-    soundHandler.mediaPlayer.start()
+    soundHandler.position = -100f
     soundHandler.sliderPosition = 0f
+    soundHandler.mediaPlayer.start()
+
 
 }
 
@@ -323,8 +530,17 @@ fun next()
     oldMediaPlayer = soundHandler.mediaPlayer
     state = GlobalVariable.icon.ICON_STOP
     soundHandler.sliderPosition = 0f
+    soundHandler.position = -100f
+
     soundHandler.mediaPlayer.start()
 
+}
+
+ @RequiresApi(Build.VERSION_CODES.P)
+ fun createAnimatedImageDrawableFromImageDecoder(context: Context, uri: Uri): AnimatedImageDrawable {
+    val source = ImageDecoder.createSource(context.contentResolver, uri)
+    val drawable = ImageDecoder.decodeDrawable(source)
+    return drawable as AnimatedImageDrawable
 }
 
 

@@ -1,6 +1,7 @@
 package com.example.gift
 
 import android.content.Intent
+import android.graphics.ImageDecoder
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
