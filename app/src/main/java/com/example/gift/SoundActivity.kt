@@ -87,10 +87,10 @@ fun ShowSong(selectedSong: Song?)
     var conf = LocalConfiguration.current
     LaunchedEffect(Unit) {
         while (true) {
-            delay(30L) // Velocità del movimento
+            delay(20L) // Velocità del movimento
             soundHandler.position += 2f
             soundHandler.gifPosition = soundHandler.position - soundHandler.selectedSong.distance
-            if (soundHandler.position > conf.screenWidthDp + soundHandler.selectedSong.distance) soundHandler.position = (-conf.screenWidthDp - soundHandler.selectedSong.distance) + 0f // Reset quando esce dallo schermo
+            if (soundHandler.position > conf.screenWidthDp + soundHandler.selectedSong.distance) soundHandler.position = (-conf.screenWidthDp + soundHandler.selectedSong.distance) + 0f // Reset quando esce dallo schermo
         }
     }
 
@@ -247,13 +247,7 @@ fun ShowSong(selectedSong: Song?)
 
                     }
 
-                    soundHandler.mediaPlayer.setOnCompletionListener {
-                        if(index == soundHandler.songList.size-1)
-                        {
-                            index = -1
-                        }
-                        next()
-                    }
+
 
 
 

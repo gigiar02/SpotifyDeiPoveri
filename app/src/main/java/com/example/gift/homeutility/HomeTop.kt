@@ -501,7 +501,7 @@ fun prev()
     soundHandler.mediaPlayer = MediaPlayer.create(soundHandler.context, soundHandler.selectedSong.music)
     oldMediaPlayer = soundHandler.mediaPlayer
     state = GlobalVariable.icon.ICON_STOP
-    soundHandler.position = -100f
+    soundHandler.position = (-150f - soundHandler.selectedSong.distance) + 0f
     soundHandler.sliderPosition = 0f
     soundHandler.mediaPlayer.start()
 
@@ -530,7 +530,7 @@ fun next()
     oldMediaPlayer = soundHandler.mediaPlayer
     state = GlobalVariable.icon.ICON_STOP
     soundHandler.sliderPosition = 0f
-    soundHandler.position = -100f
+    soundHandler.position = (-150f - soundHandler.selectedSong.distance) + 0f
 
     soundHandler.mediaPlayer.start()
 
