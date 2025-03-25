@@ -33,7 +33,11 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -129,15 +133,17 @@ fun ShowSong(selectedSong: Song?)
                         )
 
                             var Context = soundHandler.context
-                            val animatedDrawable = remember {
-                                val source = ImageDecoder.createSource(context.resources,
-                                    soundHandler.selectedSong.gif)
-                                ImageDecoder.decodeDrawable(source).apply {
-                                    if (this is AnimatedImageDrawable) {
-                                        setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE) // Loop infinito
-                                    }
+
+                        val gifResId by rememberUpdatedState(soundHandler.selectedSong.gif)
+
+                        val animatedDrawable = remember(gifResId) {
+                            val source = ImageDecoder.createSource(context.resources, gifResId)
+                            ImageDecoder.decodeDrawable(source).apply {
+                                if (this is AnimatedImageDrawable) {
+                                    setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE)
                                 }
                             }
+                        }
 
                             Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -189,7 +195,7 @@ fun ShowSong(selectedSong: Song?)
                                         },
                         modifier = Modifier.width(350.dp),
                         colors = SliderDefaults.colors(
-                            thumbColor = Color.Red, // Colore del pallino
+                            thumbColor = Color.Blue, // Colore del pallino
                             activeTrackColor = Color.Blue, // Colore della barra attiva
                             inactiveTrackColor = Color.Gray, // Colore della barra inattiva
                         )

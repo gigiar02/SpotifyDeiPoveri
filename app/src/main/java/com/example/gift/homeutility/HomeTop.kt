@@ -70,7 +70,54 @@ enum class GlobalVariable
 
     enum class gif
     {
-        RUNNING
+        RUNNING,
+        DUDUBUBU,
+        DUDUBUBU1,
+        DUDU1,
+        DUDU2,
+        DUDU3,
+        DUDU4,
+        DUDU9,
+        DUDU10,
+        DUDU11,
+        DUDU12,
+        DUDU13,
+        DUDU14,
+        HAPPY,
+        HAPPY2,
+        HAPPY3,
+        HAPPY4,
+        HAPPY5,
+        HAPPY7,
+        SFOTTI,
+        ANGRY,
+        FUNNY,
+        BED
+    }
+
+    enum class  img
+    {
+        MANU1,
+        MANU2,
+        MANU3,
+        MANU4,
+        MANU5,
+        MANU6,
+        MANU7,
+        MANU8,
+        MANU9,
+        MANU10,
+        MANU11,
+        MANU12,
+        MANU13,
+        MANU14,
+        MANU15,
+        MANU16,
+        MANU17,
+        MANU18,
+        MANU19,
+        MANU20,
+        MANU21
     }
 }
 
@@ -124,6 +171,29 @@ fun getRaw(globalVariable: GlobalVariable.gif) : Int
     when(globalVariable)
     {
         GlobalVariable.gif.RUNNING -> return R.drawable.running
+        GlobalVariable.gif.DUDUBUBU -> return R.drawable.dudububu
+        GlobalVariable.gif.DUDU1 -> return R.drawable.dudu
+        GlobalVariable.gif.DUDU2 -> return R.drawable.dudu2
+        GlobalVariable.gif.DUDU3 -> return R.drawable.dudu3
+        GlobalVariable.gif.DUDU4 -> return R.drawable.dudu4
+        GlobalVariable.gif.DUDU9 -> return R.drawable.dudu9
+        GlobalVariable.gif.DUDU10 -> return R.drawable.dudu10
+        GlobalVariable.gif.DUDU11 -> return R.drawable.dudu11
+        GlobalVariable.gif.DUDU12 -> return R.drawable.dudu12
+        GlobalVariable.gif.DUDU13 -> return R.drawable.dudu13
+        GlobalVariable.gif.DUDU14 -> return R.drawable.dudu14
+        GlobalVariable.gif.HAPPY -> return R.drawable.happy
+        GlobalVariable.gif.HAPPY2 -> return R.drawable.happy2
+        GlobalVariable.gif.HAPPY3 -> return R.drawable.happy3
+        GlobalVariable.gif.HAPPY4 -> return R.drawable.happy4
+        GlobalVariable.gif.HAPPY5 -> return R.drawable.happy5
+        GlobalVariable.gif.HAPPY7 -> return R.drawable.happy7
+        GlobalVariable.gif.SFOTTI -> return R.drawable.sfotti
+        GlobalVariable.gif.ANGRY -> return R.drawable.angry
+        GlobalVariable.gif.FUNNY -> return R.drawable.funny
+        GlobalVariable.gif.BED -> return R.drawable.bed
+        GlobalVariable.gif.DUDUBUBU1 -> return R.drawable.dudububu1
+
         else -> return R.drawable.running
 
     }
@@ -142,6 +212,40 @@ fun getIcon(globalVariable: GlobalVariable.icon) : Int
 
 
 }
+
+fun getRaw(globalVariable: GlobalVariable.img) : Int
+{
+    when(globalVariable)
+    {
+        GlobalVariable.img.MANU1 -> return R.drawable.manu1
+        GlobalVariable.img.MANU2 -> return R.drawable.manu2
+        GlobalVariable.img.MANU3 -> return R.drawable.manu3
+        GlobalVariable.img.MANU4 -> return R.drawable.manu4
+        GlobalVariable.img.MANU5 -> return R.drawable.manu5
+        GlobalVariable.img.MANU6 -> return R.drawable.manu6
+        GlobalVariable.img.MANU7 -> return R.drawable.manu7
+        GlobalVariable.img.MANU8 -> return R.drawable.manu8
+        GlobalVariable.img.MANU9 -> return R.drawable.manu9
+        GlobalVariable.img.MANU10 -> return R.drawable.manu10
+        GlobalVariable.img.MANU11 -> return R.drawable.manu11
+        GlobalVariable.img.MANU12 -> return R.drawable.manu12
+        GlobalVariable.img.MANU13 -> return R.drawable.manu13
+        GlobalVariable.img.MANU14 -> return R.drawable.manu14
+        GlobalVariable.img.MANU15 -> return R.drawable.manu15
+        GlobalVariable.img.MANU16 -> return R.drawable.manu16
+        GlobalVariable.img.MANU17 -> return R.drawable.manu17
+        GlobalVariable.img.MANU18 -> return R.drawable.manu18
+        GlobalVariable.img.MANU19 -> return R.drawable.manu19
+        GlobalVariable.img.MANU20 -> return R.drawable.manu20
+
+
+        else -> return R.drawable.manu1
+
+
+    }
+
+
+    }
 
 
 fun getColor(globalVariable: GlobalVariable.color) : Color
@@ -203,155 +307,148 @@ fun getItem() : List<Song>
     val songs = listOf(
         Song(
             "Senza Cuore",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU1),
             getRaw(GlobalVariable.music.SENZACUORE),
             getRaw(GlobalVariable.gif.RUNNING),
             50
         ),
         Song(
             "Gli sbandati hanno perso",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU2),
             getRaw(GlobalVariable.music.GLISBANDATIHANNOPERSO),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.BED),
             100
         ),
         Song(
             "Mamushi",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU3),
             getRaw(GlobalVariable.music.OKANE),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU10),
             50
         ),
         Song(
             "Diva",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU4),
             getRaw(GlobalVariable.music.DIVA),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU11),
             50
         ),
         Song(
             "Mama's Boy",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU5),
             getRaw(GlobalVariable.music.MAMASBOY),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU12),
             50
         ),
         Song(
             "Soldier",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU6),
             getRaw(GlobalVariable.music.SOLDIER),
-            getRaw(GlobalVariable.gif.RUNNING),
-            50
-        ),
-        Song(
-            "Wrong",
-            getRaw(GlobalVariable.HOME_IMAGE),
-            getRaw(GlobalVariable.music.MAMASBOY),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU12),
             50
         ),
         Song(
                 "Wrong",
-        getRaw(GlobalVariable.HOME_IMAGE),
+        getRaw(GlobalVariable.img.MANU7),
         getRaw(GlobalVariable.music.WRONG),
-        getRaw(GlobalVariable.gif.RUNNING),
+        getRaw(GlobalVariable.gif.BED),
         50
         ),Song(
             "Falling Down",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU8),
             getRaw(GlobalVariable.music.FALLINGDOWN),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU13),
             50
         ),
         Song(
             "LA LA LA",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU9),
             getRaw(GlobalVariable.music.LALA),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU2),
             50
         ),
         Song(
             "Dark Red",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU10),
             getRaw(GlobalVariable.music.DARKRED),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDU1),
             50
         ),
         Song(
             "Affirmation",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU11),
             getRaw(GlobalVariable.music.AFFIRMATION),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.SFOTTI),
             50
         ),
         Song(
             "Washing Machine",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU12),
             getRaw(GlobalVariable.music.WASHINGMACHINE),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY7),
             50
         ),
         Song(
             "APT",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU13),
             getRaw(GlobalVariable.music.APT),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY4),
             50
         ),
         Song(
             "Me And The Devil",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU14),
             getRaw(GlobalVariable.music.MEANTHEDEVIL),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY3),
             50
         ),
         Song(
             "Alone At The Edge",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU15),
             getRaw(GlobalVariable.music.ALONEATTHEEDGE),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY2),
             50
         ),
         Song(
             "Lay All Your Love On Me",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU16),
             getRaw(GlobalVariable.music.LAYALLYOURLOVEONME),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY),
             150
         ),
         Song(
             "All Quiet On The Western",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU17),
             getRaw(GlobalVariable.music.ALLQUIETONONTHEWESTERN),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.FUNNY),
             200
         ),
         Song(
             "Dark Is The Night",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU18),
             getRaw(GlobalVariable.music.DARKISTHENIGHT),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY4),
             100
         ),
         Song(
             "I don't Want To Set The World",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU19),
             getRaw(GlobalVariable.music.IDONTWANTTOSET),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.DUDUBUBU1),
             250
         ),
         Song(
             "Ti Fa Stare Bene",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU20),
             getRaw(GlobalVariable.music.TIFASTAREBENE),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.HAPPY7),
             70
         ),
         Song(
             "ANXIETY",
-            getRaw(GlobalVariable.HOME_IMAGE),
+            getRaw(GlobalVariable.img.MANU21),
             getRaw(GlobalVariable.music.ANXIETY),
-            getRaw(GlobalVariable.gif.RUNNING),
+            getRaw(GlobalVariable.gif.SFOTTI),
             50
         )
     )

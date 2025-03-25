@@ -49,6 +49,7 @@ import com.example.gift.ui.theme.GiftTheme
 import com.example.gift.homeutility.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 
 
@@ -109,18 +110,19 @@ fun StartApp()
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Image(
-                painter = painterResource(id = getRaw(GlobalVariable.HOME_IMAGE)),
+                painter = painterResource(id = getRaw(GlobalVariable.img.MANU3)),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(200.dp),
                 contentScale = ContentScale.FillWidth
             )
 
             //Bottone per avviare la musica
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .height(30.dp),
                 horizontalArrangement = Arrangement.End,
             ) {
                 IconButton(onClick = {
@@ -181,7 +183,7 @@ fun StartApp()
             LazyColumn(
                 modifier = Modifier.wrapContentSize()
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(0.dp) // Spazio tra gli elementi
+                verticalArrangement = Arrangement.spacedBy(10.dp) // Spazio tra gli elementi
 
             ) {
                 itemsIndexed(songs) { i, song ->
@@ -212,15 +214,17 @@ fun StartApp()
 
                 }
             }
+                var conf = LocalConfiguration.current
+
                 if (isVisible) {
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxWidth()
-                    .height(70.dp)
-                    .offset(x = 0.dp, y = 530.dp)
-                    .background(Color.Black)
-                ,
+                    .height(50.dp)
+                    .offset(x = 0.dp, y = conf.screenHeightDp.dp - 297.dp)
+                    .background(Color.Black),
+
                 //horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Bottom
             ) {
@@ -277,9 +281,9 @@ fun SongItem(song: Song,click:   () -> Unit) {
             painter = painterResource(id = song.image),
             contentDescription = null,
             modifier = Modifier
-                .size(70.dp)
-                .clip(RoundedCornerShape(25.dp)),
-            contentScale = ContentScale.Fit
+                .size(50.dp)
+                .clip(RoundedCornerShape(45.dp)),
+            contentScale = ContentScale.Crop
 
         )
 
@@ -315,9 +319,9 @@ fun SongBoard(click:   () -> Unit) {
                 painter = painterResource(id = soundHandler.selectedSong.image),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(70.dp)
-                    .clip(RoundedCornerShape(25.dp)),
-                contentScale = ContentScale.Fit
+                    .size(50.dp)
+                    .clip(RoundedCornerShape(45.dp)),
+                contentScale = ContentScale.Crop
 
             )
 
